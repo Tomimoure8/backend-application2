@@ -1,34 +1,26 @@
 import { Router } from 'express';
-import { UserDAO } from '../dao/User.dao.js';
-import { UserDTO } from '../dto/User.dto.js';
+import passport from 'passport'
+import jwt from 'jsonwebtoken'
 
 const router = Router();
-const userDao = new UserDAO();
+const JWT_SECRET = process.env.JWT_SECRET || 'coderSecretKey'
 
-// Simulación de login
-router.post('/login', async (req, res) => {
-    const { email, password } = req.body;
+const loginSuccess = async (req, res) => {
+    const token = jwt.sign({ id: req.user._id }, JWT_SECRET, { expiresIn: '1h' });
+    res.json({ message: 'Login exitoso', token });
+};
 
-    // Simulamos validación de usuario (sin hashear, solo ejemplo)
-    const user = await userDao.getByEmail(email);
-    if (!user || user.password !== password) {
-        return res.status(401).json({ error: 'Credenciales inválidas' });
-    }
+const currentUser = (req, res) => {
+    const { _id, email, first_name, last_name, role } = req.user;
+    res.json({ id: _id, email, fullName: `${first_name} ${last_name}`, role });
+};
 
-    // Guardamos el user simulado en sesion (en este caso, req)
-    req.user = user;
-    res.json({ message: 'Login exitoso', user });
-});
+router.post('/register', passport.authenticate('register', { session: false }), (req, res) => {
+    res.json({ message: 'Usuario registrado correctamente' })
+})
 
-// Simulación de `/current`
-router.get('/current', async (req, res) => {
-    // ⚠️ En este ejemplo, simulamos que ya tenemos el id del usuario
-    const user = await userDao.getById('681a6cbea868bc04c14636f2');
+router.post('/login', passport.authenticate('login', { session: false }), loginSuccess)
 
-    if (!user) return res.status(404).json({ message: 'Usuario no encontrado' });
-
-    const safeUser = new UserDTO(user);
-    res.json(safeUser);
-});
+router.get('/current', passport.authenticate('jwt', { session: false }), currentUser)
 
 export default router;

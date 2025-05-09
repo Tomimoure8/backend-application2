@@ -1,16 +1,38 @@
-import { Router } from 'express';
-import { authRole } from '../middlewares/auth.middleware.js';
+import { Router } from 'express'
+import passport from 'passport'
+import {
+    getProducts,
+    getProductById,
+    createProduct,
+    updateProduct,
+    deleteProduct
+} from '../controllers/products.controller.js'
+import { authRole } from '../middlewares/auth.middleware.js'
 
-const router = Router();
+const router = Router()
 
-// Crear producto – solo admin
-router.post('/', authRole('admin'), (req, res) => {
-    res.send('✅ Producto creado (solo admins pueden ver esto)');
-});
+router.get('/', getProducts)
+router.get('/:pid', getProductById)
 
-// Ver productos – cualquiera
-router.get('/', (req, res) => {
-    res.send('📦 Lista de productos (todos pueden ver)');
-});
+router.post(
+    '/',
+    passport.authenticate('jwt', { session: false }),
+    authRole('admin'),
+    createProduct
+)
 
-export default router;
+router.put(
+    '/:pid',
+    passport.authenticate('jwt', { session: false }),
+    authRole('admin'),
+    updateProduct
+)
+
+router.delete(
+    '/:pid',
+    passport.authenticate('jwt', { session: false }),
+    authRole('admin'),
+    deleteProduct
+)
+
+export default router
