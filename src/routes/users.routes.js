@@ -23,4 +23,15 @@ router.get('/current', async (req, res) => {
     }
 });
 
+
+router.get('/', async (req, res) => {
+    try {
+        const users = await userDao.getAll(); 
+        res.json(users);
+    } catch (err) {
+        res.status(500).json({ error: 'Error al obtener los usuarios' });
+    }
+});
+
+
 export default router;

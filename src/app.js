@@ -7,6 +7,7 @@ import userRoutes from './routes/users.routes.js'
 import productRoutes from './routes/products.routes.js'
 import cartRoutes from './routes/carts.routes.js'
 import sessionRoutes from './routes/sessions.routes.js'
+import mocksRoutes from './routes/mocks.router.js'
 
 dotenv.config();
 
@@ -20,6 +21,7 @@ app.use('/api/users', userRoutes)
 app.use('/api/products', productRoutes)
 app.use('/api/carts', cartRoutes)
 app.use('/api/sessions', sessionRoutes)
+app.use('/api/mocks', mocksRoutes)
 
 // Prueba inicial
 app.get('/ping', (req, res) => {

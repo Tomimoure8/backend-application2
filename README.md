@@ -2,6 +2,13 @@
 
 Este es un servidor backend profesionalizado para un sistema de ecommerce, desarrollado con Node.js, Express, MongoDB y Passport. El proyecto incluye autenticación, autorización, creación de productos, manejo de carritos, generación de tickets y control de stock.
 
+## 🧪 Mocking de datos (Backend 3 - Primera entrega)
+
+- Nueva ruta: `/api/mocks/mockingusers` → genera 50 usuarios falsos (no se guardan)
+- Nueva ruta: `/api/mocks/generateData?users=50&pets=0` → inserta los mocks en MongoDB Atlas
+- Compatible con el modelo de usuarios actual
+- Ideal para pruebas masivas y testeo en desarrollo
+
 ---
 
 ## 🚀 Tecnologías utilizadas
