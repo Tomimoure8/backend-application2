@@ -8,6 +8,8 @@ import productRoutes from './routes/products.routes.js'
 import cartRoutes from './routes/carts.routes.js'
 import sessionRoutes from './routes/sessions.routes.js'
 import mocksRoutes from './routes/mocks.router.js'
+import { swaggerSpecs, swaggerUi } from './config/swagger.js';
+
 
 dotenv.config();
 
@@ -22,6 +24,7 @@ app.use('/api/products', productRoutes)
 app.use('/api/carts', cartRoutes)
 app.use('/api/sessions', sessionRoutes)
 app.use('/api/mocks', mocksRoutes)
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
 
 // Prueba inicial
 app.get('/ping', (req, res) => {
